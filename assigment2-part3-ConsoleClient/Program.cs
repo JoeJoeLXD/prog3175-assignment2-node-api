@@ -154,9 +154,9 @@ private static async Task<GreetingResponse?> GetGreetingAsync(string timeOfDay, 
         // Ensure the property names are camelCase
         var requestBody = new
         {
-            timeOfDay = timeOfDay,  // Updated to camelCase
-            language = language,    // Updated to camelCase
-            tone = tone             // Updated to camelCase
+            timeOfDay = timeOfDay,  
+            language = language,    
+            tone = tone             
         };
 
         var json = JsonSerializer.Serialize(requestBody);

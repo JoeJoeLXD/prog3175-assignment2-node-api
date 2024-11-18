@@ -1,3 +1,8 @@
+//Program ID: PROG3210-24F-Sec2
+//Purpose: Assignment 2 
+//Part III: Consume the Web API using a Console Application
+//Created Nov 15 2024 by Xiangdong Li
+
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 
@@ -30,7 +35,6 @@ db.serialize(() => {
     ["Morning", "English", "Morning", "Casual"],
     ["Morning", "French", "Salut", "Casual"],
     ["Morning", "Spanish", "Hola, buenos días", "Casual"],
-
     // Afternoon Formal
     ["Afternoon", "English", "Good Afternoon", "Formal"],
     ["Afternoon", "French", "Bon Après-midi", "Formal"],
@@ -39,7 +43,6 @@ db.serialize(() => {
     ["Afternoon", "English", "Afternoon", "Casual"],
     ["Afternoon", "French", "Salut, après-midi", "Casual"],
     ["Afternoon", "Spanish", "Hola, buenas tardes", "Casual"],
-
     // Evening Formal
     ["Evening", "English", "Good Evening", "Formal"],
     ["Evening", "French", "Bonsoir", "Formal"],
@@ -56,15 +59,13 @@ db.serialize(() => {
 
 // Greet Endpoint
 app.post("/api/greetings/greet", (req, res) => {
-  // Log the incoming request body
+  
   console.log("Received request body:", req.body);
 
   const { timeOfDay, language, tone } = req.body;
 
-  // Log each value to ensure they are being passed correctly
   console.log(`timeOfDay: ${timeOfDay}, language: ${language}, tone: ${tone}`);
 
-  // Query the database for the greeting message
   db.get(
     `SELECT greetingMessage FROM Greetings WHERE timeOfDay = ? AND language = ? AND tone = ?`,
     [timeOfDay, language, tone],
