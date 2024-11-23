@@ -4,11 +4,18 @@
 //Created Nov 15 2024 by Xiangdong Li
 
 const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
+const fs = require("fs");
 const path = require("path");
+const sqlite3 = require("sqlite3").verbose();
 
-const dbPath = path.join(__dirname, "database", "greetings.db");
-const db = new sqlite3.Database(dbPath, (err) => {
+// Copy the database file to a writable location, e.g., `/tmp`
+const sourcePath = path.join(__dirname, "database", "greetings.db");
+const writablePath = "/tmp/greetings.db";
+
+fs.copyFileSync(sourcePath, writablePath);
+
+// Use the database from the writable path
+const db = new sqlite3.Database(writablePath, (err) => {
   if (err) {
     console.error("Could not open database", err);
   } else {
