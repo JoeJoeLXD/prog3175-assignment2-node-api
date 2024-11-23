@@ -16,7 +16,7 @@ class Program
     static async Task Main(string[] args)
     {
         // Set the base address of API
-        client.BaseAddress = new Uri("http://localhost:4000");
+        client.BaseAddress = new Uri("https://prog3175-assignment2-node-api.vercel.app");
 
         // Fetch the available times of day and languages when the application starts
         var timesOfDay = await GetTimesOfDayAsync();
@@ -147,46 +147,46 @@ class Program
     }
 
     // Method to get a greeting based on the time of day, language, and tone
-private static async Task<GreetingResponse?> GetGreetingAsync(string timeOfDay, string language, string tone)
-{
-    try
+    private static async Task<GreetingResponse?> GetGreetingAsync(string timeOfDay, string language, string tone)
     {
-        // Ensure the property names are camelCase
-        var requestBody = new
+        try
         {
-            timeOfDay = timeOfDay,  
-            language = language,    
-            tone = tone             
-        };
+            // Ensure the property names are camelCase
+            var requestBody = new
+            {
+                timeOfDay = timeOfDay,
+                language = language,
+                tone = tone
+            };
 
-        var json = JsonSerializer.Serialize(requestBody);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonSerializer.Serialize(requestBody);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await client.PostAsync("/api/greetings/greet", content);
-        response.EnsureSuccessStatusCode();
+            var response = await client.PostAsync("/api/greetings/greet", content);
+            response.EnsureSuccessStatusCode();
 
-        var responseBody = await response.Content.ReadAsStringAsync();
-        Console.WriteLine($"\nAPI Response Body: {responseBody}");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"\nAPI Response Body: {responseBody}");
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-        var greetingResponse = JsonSerializer.Deserialize<GreetingResponse>(responseBody, options);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var greetingResponse = JsonSerializer.Deserialize<GreetingResponse>(responseBody, options);
 
-        if (greetingResponse != null)
-        {
-            Console.WriteLine($"Debug: Greeting Message - {greetingResponse.GreetingMessage}");
+            if (greetingResponse != null)
+            {
+                Console.WriteLine($"Debug: Greeting Message - {greetingResponse.GreetingMessage}");
+            }
+
+            return greetingResponse;
         }
-
-        return greetingResponse;
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.Message}");
+            return null;
+        }
     }
-    catch (Exception e)
-    {
-        Console.WriteLine($"Error: {e.Message}");
-        return null;
-    }
-}
 
 
     // Greeting response class for deserialization
