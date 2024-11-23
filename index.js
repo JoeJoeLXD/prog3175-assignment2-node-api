@@ -150,11 +150,20 @@ app.get("/", (req, res) => {
   `);
 });
 
-// Greet Endpoint
+// Greet Endpoint with Validation and Enhanced Response
 app.post("/api/greetings/greet", (req, res) => {
   console.log("Received request body:", req.body);
 
   const { timeOfDay, language, tone } = req.body;
+
+  // Input validation
+  const validTimesOfDay = ["Morning", "Afternoon", "Evening"];
+  const validLanguages = ["English", "French", "Spanish"];
+  const validTones = ["Formal", "Casual"];
+
+  if (!validTimesOfDay.includes(timeOfDay) || !validLanguages.includes(language) || !validTones.includes(tone)) {
+    return res.status(400).json({ error: "Invalid input parameters" });
+  }
 
   db.get(
     `SELECT greetingMessage FROM Greetings WHERE timeOfDay = ? AND language = ? AND tone = ?`,
@@ -164,9 +173,14 @@ app.post("/api/greetings/greet", (req, res) => {
         console.error("Database error:", err);
         res.status(500).json({ error: "Database error" });
       } else if (row) {
-        res.json({ greetingMessage: row.greetingMessage });
+        res.json({
+          timeOfDay,
+          language,
+          tone,
+          greetingMessage: row.greetingMessage,
+        });
       } else {
-        res.status(404).json({ error: "Greeting not found" });
+        res.status(404).json({ error: `Greeting not found for timeOfDay: ${timeOfDay}, language: ${language}, tone: ${tone}` });
       }
     }
   );
