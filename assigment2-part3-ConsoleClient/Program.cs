@@ -3,6 +3,11 @@
 //Part III: Consume the Web API using a Console Application
 //Created Nov 15 2024 by Xiangdong Li
 
+//Program ID: PROG3210-24F-Sec2
+//Purpose: Assignment 3
+//Part III: Consume the Web API using a Console Application
+//Created Nov 22 2024 by Xiangdong Li
+
 using System;
 using System.Net.Http;
 using System.Text;

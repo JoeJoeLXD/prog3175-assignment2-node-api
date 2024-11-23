@@ -1,7 +1,12 @@
 //Program ID: PROG3210-24F-Sec2
 //Purpose: Assignment 2
-//Part III: Consume the Web API using a Console Application
+//Part I: Develop a Simple Web API with SQLite in Node.js
 //Created Nov 15 2024 by Xiangdong Li
+
+//Program ID: PROG3210-24F-Sec2
+//Purpose: Assignment 3
+//Part II: Deploy Your API on Vercel 
+//Created Nov 22 2024 by Xiangdong Li
 
 const express = require("express");
 const fs = require("fs");
