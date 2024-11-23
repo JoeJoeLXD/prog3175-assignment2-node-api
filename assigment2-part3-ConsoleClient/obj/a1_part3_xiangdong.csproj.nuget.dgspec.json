@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A2_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj": {}
+    "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A3_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj": {}
   },
   "projects": {
-    "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A2_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj": {
+    "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A3_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A2_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj",
+        "projectUniqueName": "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A3_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj",
         "projectName": "a1_part3_xiangdong",
-        "projectPath": "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A2_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj",
+        "projectPath": "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A3_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\a1_part3_xiangdong.csproj",
         "packagesPath": "C:\\Users\\xd18\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A2_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\obj\\",
+        "outputPath": "C:\\Users\\xd18\\OneDrive - Conestoga College\\Conestoga\\3A_Level9\\PROG3175\\Assignment\\prog3175_A3_Xiangdong\\assignment2-node-api\\assigment2-part3-ConsoleClient\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

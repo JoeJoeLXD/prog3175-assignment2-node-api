@@ -5,7 +5,7 @@
 
 //Program ID: PROG3210-24F-Sec2
 //Purpose: Assignment 3
-//Part II: Deploy Your API on Vercel 
+//Part II: Deploy Your API on Vercel
 //Created Nov 22 2024 by Xiangdong Li
 
 const express = require("express");
@@ -13,11 +13,25 @@ const fs = require("fs");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
+const app = express();
+const port = process.env.PORT || 4000;
+
+// Determine base URL for API depending on the environment
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://prog3175-assignment2-node-api.vercel.app"
+    : `http://localhost:${port}`;
+
+console.log(`Base URL is set to: ${baseUrl}`);
+
 // Copy the database file to a writable location, e.g., `/tmp`
 const sourcePath = path.join(__dirname, "database", "greetings.db");
-const writablePath = "/tmp/greetings.db";
+const writablePath =
+  process.env.NODE_ENV === "production" ? "/tmp/greetings.db" : sourcePath;
 
-fs.copyFileSync(sourcePath, writablePath);
+if (process.env.NODE_ENV === "production") {
+  fs.copyFileSync(sourcePath, writablePath);
+}
 
 // Use the database from the writable path
 const db = new sqlite3.Database(writablePath, (err) => {
@@ -28,54 +42,112 @@ const db = new sqlite3.Database(writablePath, (err) => {
   }
 });
 
-const app = express();
-const port = 4000;
-
 app.use(express.json());
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
-
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS Greetings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        timeOfDay TEXT,
-        language TEXT,
-        greetingMessage TEXT,
-        tone TEXT
-    )`);
-
-  const stmt = db.prepare(
-    `INSERT INTO Greetings (timeOfDay, language, greetingMessage, tone) VALUES (?, ?, ?, ?)`
-  );
-  const seedData = [
-    // Morning Formal
-    ["Morning", "English", "Good Morning", "Formal"],
-    ["Morning", "French", "Bonjour", "Formal"],
-    ["Morning", "Spanish", "Buenos Días", "Formal"],
-    // Morning Casual
-    ["Morning", "English", "Morning", "Casual"],
-    ["Morning", "French", "Salut", "Casual"],
-    ["Morning", "Spanish", "Hola, buenos días", "Casual"],
-    // Afternoon Formal
-    ["Afternoon", "English", "Good Afternoon", "Formal"],
-    ["Afternoon", "French", "Bon Après-midi", "Formal"],
-    ["Afternoon", "Spanish", "Buenas Tardes", "Formal"],
-    // Afternoon Casual
-    ["Afternoon", "English", "Afternoon", "Casual"],
-    ["Afternoon", "French", "Salut, après-midi", "Casual"],
-    ["Afternoon", "Spanish", "Hola, buenas tardes", "Casual"],
-    // Evening Formal
-    ["Evening", "English", "Good Evening", "Formal"],
-    ["Evening", "French", "Bonsoir", "Formal"],
-    ["Evening", "Spanish", "Buenas Noches", "Formal"],
-    // Evening Casual
-    ["Evening", "English", "Evening", "Casual"],
-    ["Evening", "French", "Salut, soirée", "Casual"],
-    ["Evening", "Spanish", "Hola, buenas noches", "Casual"],
-  ];
-
-  seedData.forEach((data) => stmt.run(data));
-  stmt.finalize();
+// Enhance the root endpoint to serve an HTML welcome page
+app.get("/", (req, res) => {
+  res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greetings API - Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        h1 {
+            color: #5a67d8;
+        }
+        .endpoint {
+            margin-top: 20px;
+        }
+        .endpoint a {
+            color: #3182ce;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .endpoint a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3182ce;
+            color: #ffffff !important; /* Ensure text color is always white */
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: bold; /* Makes text bold for better visibility */
+            border: none;
+            font-size: 16px; /* Set a reasonable font size */
+        }
+        .btn:hover {
+            background-color: #225ea8;
+            color: #ffffff !important; /* Maintain white color on hover */
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Greetings API!</h1>
+    <p>
+        This is a simple web API that provides customized greeting messages based on the time of day, language, and tone. Use the endpoints described below to interact with the API.
+    </p>
+    <h2>Available Endpoints</h2>
+    <div class="endpoint">
+        <h3>Get a Greeting</h3>
+        <p>Endpoint: <code>POST ${baseUrl}/api/greetings/greet</code></p>
+        <p>Description: Fetch a greeting message by specifying the time of day, language, and tone.</p>
+        <p>Example Request Body:</p>
+        <pre>{
+    "timeOfDay": "Morning",
+    "language": "English",
+    "tone": "Formal"
+}</pre>
+        <p>To use this endpoint, send a POST request with the specified parameters. You can use tools like Postman or a simple JavaScript fetch request to test it.</p>
+    </div>
+    <div class="endpoint">
+        <h3>Get All Times of Day</h3>
+        <p>Endpoint: <code>GET ${baseUrl}/api/greetings/timesofday</code></p>
+        <p>Description: Returns a list of all available times of day.</p>
+        <a class="btn" href="${baseUrl}/api/greetings/timesofday" target="_blank">View Times of Day</a>
+    </div>
+    <div class="endpoint">
+        <h3>Get Supported Languages</h3>
+        <p>Endpoint: <code>GET ${baseUrl}/api/greetings/languages</code></p>
+        <p>Description: Returns a list of all supported languages for greetings.</p>
+        <a class="btn" href="${baseUrl}/api/greetings/languages" target="_blank">View Languages</a>
+    </div>
+    <div class="endpoint">
+        <h3>Get Supported Tones</h3>
+        <p>Endpoint: <code>GET ${baseUrl}/api/greetings/tones</code></p>
+        <p>Description: Returns a list of all supported tones (e.g., Formal, Casual) for greetings.</p>
+        <a class="btn" href="${baseUrl}/api/greetings/tones" target="_blank">View Tones</a>
+    </div>
+    <footer>
+        <p>
+            Created as part of PROG3210-24F-Sec2, Assignment 2 & 3 for Conestoga College. Developed by Xiangdong Li.<br>
+            Contact: <a href="mailto:xli3963@conestogac.on.ca">xli3963@conestogac.on.ca</a>
+        </p>
+    </footer>
+</body>
+</html>
+  `);
 });
 
 // Greet Endpoint
@@ -83,8 +155,6 @@ app.post("/api/greetings/greet", (req, res) => {
   console.log("Received request body:", req.body);
 
   const { timeOfDay, language, tone } = req.body;
-
-  console.log(`timeOfDay: ${timeOfDay}, language: ${language}, tone: ${tone}`);
 
   db.get(
     `SELECT greetingMessage FROM Greetings WHERE timeOfDay = ? AND language = ? AND tone = ?`,
@@ -94,10 +164,8 @@ app.post("/api/greetings/greet", (req, res) => {
         console.error("Database error:", err);
         res.status(500).json({ error: "Database error" });
       } else if (row) {
-        console.log("Greeting found:", row);
         res.json({ greetingMessage: row.greetingMessage });
       } else {
-        console.warn("Greeting not found for provided parameters.");
         res.status(404).json({ error: "Greeting not found" });
       }
     }
@@ -111,7 +179,6 @@ app.get("/api/greetings/timesofday", (req, res) => {
       console.error("Database error:", err);
       res.status(500).json({ error: "Database error" });
     } else {
-      console.log("Times of day found:", rows);
       res.json(rows.map((row) => row.timeOfDay));
     }
   });
@@ -124,21 +191,22 @@ app.get("/api/greetings/languages", (req, res) => {
       console.error("Database error:", err);
       res.status(500).json({ error: "Database error" });
     } else {
-      console.log("Languages found:", rows);
       res.json(rows.map((row) => row.language));
     }
   });
 });
 
-app.get("/", (req, res) => {
-  res.send(
-    "Welcome to the Greetings API! Use /api/greetings/greet to get started."
-  );
+// Get Supported Tones Endpoint
+app.get("/api/greetings/tones", (req, res) => {
+  const tones = ["Formal", "Casual"];
+  res.json(tones);
 });
 
-// Start the Server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Start the Server (only if not in production)
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => {
+    console.log(`Server is running on ${baseUrl}`);
+  });
+}
 
 module.exports = app;
