@@ -14,6 +14,8 @@ app.use(express.json());
 // Create a connection to the SQLite database
 const db = new sqlite3.Database("./database/greetings.db");
 
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS Greetings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
