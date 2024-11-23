@@ -116,8 +116,9 @@ app.get("/", (req, res) => {
         <p>Example Request Body:</p>
         <pre>{
     "timeOfDay": "Morning",
-    "language": "English",
-    "tone": "Formal"
+    "language": "French",
+    "tone": "Casual",
+    "greetingMessage": "Salut"
 }</pre>
         <p>To use this endpoint, send a POST request with the specified parameters. You can use tools like Postman or a simple JavaScript fetch request to test it.</p>
     </div>
@@ -161,7 +162,11 @@ app.post("/api/greetings/greet", (req, res) => {
   const validLanguages = ["English", "French", "Spanish"];
   const validTones = ["Formal", "Casual"];
 
-  if (!validTimesOfDay.includes(timeOfDay) || !validLanguages.includes(language) || !validTones.includes(tone)) {
+  if (
+    !validTimesOfDay.includes(timeOfDay) ||
+    !validLanguages.includes(language) ||
+    !validTones.includes(tone)
+  ) {
     return res.status(400).json({ error: "Invalid input parameters" });
   }
 
@@ -180,7 +185,11 @@ app.post("/api/greetings/greet", (req, res) => {
           greetingMessage: row.greetingMessage,
         });
       } else {
-        res.status(404).json({ error: `Greeting not found for timeOfDay: ${timeOfDay}, language: ${language}, tone: ${tone}` });
+        res
+          .status(404)
+          .json({
+            error: `Greeting not found for timeOfDay: ${timeOfDay}, language: ${language}, tone: ${tone}`,
+          });
       }
     }
   );
