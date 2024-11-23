@@ -5,14 +5,21 @@
 
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
+
+const dbPath = path.join(__dirname, "database", "greetings.db");
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error("Could not open database", err);
+  } else {
+    console.log("Connected to the SQLite database");
+  }
+});
 
 const app = express();
 const port = 4000;
 
 app.use(express.json());
-
-// Create a connection to the SQLite database
-const db = new sqlite3.Database("./database/greetings.db");
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
