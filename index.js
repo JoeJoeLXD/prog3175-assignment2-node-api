@@ -11,8 +11,6 @@ const port = 4000;
 
 app.use(express.json());
 
-module.exports = app;
-
 // Create a connection to the SQLite database
 const db = new sqlite3.Database("./database/greetings.db");
 
@@ -121,3 +119,5 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+module.exports = app;
