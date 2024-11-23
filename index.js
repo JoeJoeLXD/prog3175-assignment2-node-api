@@ -1,5 +1,5 @@
 //Program ID: PROG3210-24F-Sec2
-//Purpose: Assignment 2 
+//Purpose: Assignment 2
 //Part III: Consume the Web API using a Console Application
 //Created Nov 15 2024 by Xiangdong Li
 
@@ -10,6 +10,8 @@ const app = express();
 const port = 4000;
 
 app.use(express.json());
+
+module.exports = app;
 
 // Create a connection to the SQLite database
 const db = new sqlite3.Database("./database/greetings.db");
@@ -59,7 +61,6 @@ db.serialize(() => {
 
 // Greet Endpoint
 app.post("/api/greetings/greet", (req, res) => {
-  
   console.log("Received request body:", req.body);
 
   const { timeOfDay, language, tone } = req.body;
